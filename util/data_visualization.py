@@ -4,6 +4,7 @@ from sklearn.manifold import TSNE
 import umap.umap_ as umap
 import seaborn as sns
 import matplotlib.pyplot as plt
+from skpp import ProjectionPursuitRegressor
 
 
 def pca_visualization(data, target):
@@ -45,3 +46,14 @@ def umap_visualization(data, target):
     plt.scatter(embedding[:, 0], embedding[:, 1], c=[sns.color_palette()[x] for x in data[target]])
     plt.gca().set_aspect('equal', 'datalim')
     plt.title('UMAP projection of the Iris dataset', fontsize=24)
+
+def projection_pursuit_visualization(data, target):
+    estimator = ProjectionPursuitRegressor(r=2)
+    x_transformed = estimator.fit_transform(data.drop(target, axis=1), data[target])
+
+    pursuit_df = data.copy()
+    pursuit_df['projection-1'] = x_transformed[:,0]
+    pursuit_df['projection-2'] = x_transformed[:,1]
+    
+    plt.figure(figsize=(15,8))
+    sns.scatterplot(x='projection-1', y='projection-2', hue=target, data=pursuit_df)
