@@ -1,0 +1,54 @@
+---
+title: "R Notebook"
+output: md_document
+---
+### Imports
+
+```{r results='hide', message=FALSE, warning=FALSE}
+library(tidyverse)
+library(ramify)
+library(stringr)
+library(arules)
+library(arulesViz)
+```
+
+### Load data and extract columns by type. Remove Id column.
+```{r}
+data = as_tibble(read.csv("../../Data/train.csv"))
+categorical_columns = c("Soil_Type", "Wilderness_Area")
+data = data %>% select(-"Id")
+
+
+for (categorical_column in categorical_columns) {
+  categorical_data = data %>% select(starts_with(categorical_column))
+  types = colnames(categorical_data)[apply(categorical_data,1,which.max)]
+  data = data %>% select(-starts_with(categorical_column))
+  data[categorical_column] = types
+}
+
+target = c("Cover_Type")
+numerical_columns = setdiff(setdiff(colnames(data), target), categorical_columns)
+```
+
+### Change columns to factors and discretisize numerical columns
+```{r}
+for (numerical_column in numerical_columns) {
+  data[numerical_column] = ordered(cut(data[[numerical_column]], 3, dig.lab=10))
+}
+
+data[target] = Map(paste, names(data[target]), data[target], sep = '')
+
+data[[target]] = factor(data[[target]])
+data[['Soil_Type']] = factor(data[['Soil_Type']])
+data[['Wilderness_Area']] = factor(data[['Wilderness_Area']])
+
+print(str(data))
+
+transactions = as(data, "transactions")
+
+```
+### 
+```{r}
+rules = apriori(transactions, parameter = list(support=0.08, confidence=0.75), appearance = list(rhs=paste0("Cover_Type=", unique(data$Cover_Type))))
+inspect(rules)
+```
