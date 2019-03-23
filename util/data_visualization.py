@@ -4,6 +4,8 @@ from sklearn.manifold import TSNE
 import umap.umap_ as umap
 import seaborn as sns
 import matplotlib.pyplot as plt
+import numpy as np
+from sklearn.model_selection import learning_curve
 
 
 def pca_visualization(data, target, color=None):
@@ -51,3 +53,35 @@ def umap_visualization(data, target, color=None):
     plt.scatter(embedding[:, 0], embedding[:, 1], c=[sns.color_palette()[x] for x in color_column])
     plt.gca().set_aspect('equal', 'datalim')
     plt.title('UMAP projection of the Cover Type dataset', fontsize=24)
+    
+def plot_learning_curve(estimator, title, X, y, ylim=None, cv=None,
+                        n_jobs=None, train_sizes=np.linspace(.1, 1.0, 5)):
+    plt.figure(figsize=(30, 15))
+    plt.title(title, fontsize=30)
+    if ylim is not None:
+        plt.ylim(*ylim)
+    plt.xlabel("Training examples", fontsize=25)
+    plt.ylabel("Score", fontsize=25)
+    train_sizes, train_scores, test_scores = learning_curve(
+        estimator, X, y, cv=cv, n_jobs=n_jobs, train_sizes=train_sizes)
+    train_scores_mean = np.mean(train_scores, axis=1)
+    train_scores_std = np.std(train_scores, axis=1)
+    test_scores_mean = np.mean(test_scores, axis=1)
+    test_scores_std = np.std(test_scores, axis=1)
+    plt.grid()
+
+    plt.fill_between(train_sizes, train_scores_mean - train_scores_std,
+                     train_scores_mean + train_scores_std, alpha=0.1,
+                     color="r")
+    plt.fill_between(train_sizes, test_scores_mean - test_scores_std,
+                     test_scores_mean + test_scores_std, alpha=0.1, color="g")
+    plt.plot(train_sizes, train_scores_mean, 'o-', color="r",
+             label="Training score")
+    plt.plot(train_sizes, test_scores_mean, 'o-', color="g",
+             label="Cross-validation score")
+
+    plt.legend(loc="best", prop={'size': 25})
+    plt.tick_params(labelsize=20)
+    
+    return plt
+    
