@@ -6,6 +6,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.model_selection import learning_curve
+from sklearn.metrics import confusion_matrix
 
 
 def pca_visualization(data, target, color=None):
@@ -84,4 +85,39 @@ def plot_learning_curve(estimator, title, X, y, ylim=None, cv=None,
     plt.tick_params(labelsize=20)
     
     return plt
+
+def plot_confusion_matrix(y_true, y_pred, classes,
+                          normalize=False,
+                          title=None,
+                          cmap=plt.cm.Blues):
+    cm = confusion_matrix(y_true, y_pred)
+
+    fig, ax = plt.subplots(figsize=(40, 40))
+    im = ax.imshow(cm, interpolation='nearest', cmap=cmap)
+    ax.figure.colorbar(im, ax=ax)
+    # We want to show all ticks...
+    ax.set(xticks=np.arange(cm.shape[1]),
+           yticks=np.arange(cm.shape[0]),
+           # ... and label them with the respective list entries
+           xticklabels=classes, 
+           yticklabels=classes)
+    ax.set_title(title, fontsize=50)
+    ax.set_ylabel('True label', fontsize=30)
+    ax.set_xlabel('Predicted label', fontsize=30)
+
+    # Rotate the tick labels and set their alignment.
+    plt.setp(ax.get_xticklabels(), rotation=45, ha="right",
+             rotation_mode="anchor")
+    plt.tick_params(labelsize=20)
+
+    # Loop over data dimensions and create text annotations.
+    fmt = '.2f' if normalize else 'd'
+    thresh = cm.max() / 2.
+    for i in range(cm.shape[0]):
+        for j in range(cm.shape[1]):
+            ax.text(j, i, format(cm[i, j], fmt),
+                    ha="center", va="center", fontsize=25,
+                    color="white" if cm[i, j] > thresh else "black")
+    fig.tight_layout()
+    return ax
     
