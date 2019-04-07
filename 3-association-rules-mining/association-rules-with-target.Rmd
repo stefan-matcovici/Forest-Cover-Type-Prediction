@@ -1,6 +1,6 @@
 ---
 title: "R Notebook"
-output: md_document
+output: html_document
 ---
 ### Imports
 
@@ -49,6 +49,6 @@ transactions = as(data, "transactions")
 ```
 ### 
 ```{r}
-rules = apriori(transactions, parameter = list(support=0.08, confidence=0.75), appearance = list(rhs=paste0("Cover_Type=", unique(data$Cover_Type))))
+rules = apriori(transactions, parameter = list(support=0.07, confidence=0.7), appearance = list(rhs=paste0("Cover_Type=", unique(data$Cover_Type))))
 inspect(rules)
 ```

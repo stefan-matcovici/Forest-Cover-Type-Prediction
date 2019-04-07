@@ -57,13 +57,13 @@
 
 ### 
 
-    rules = apriori(transactions, parameter = list(support=0.08, confidence=0.75), appearance = list(rhs=paste0("Cover_Type=", unique(data$Cover_Type))))
+    rules = apriori(transactions, parameter = list(support=0.07, confidence=0.7), appearance = list(rhs=paste0("Cover_Type=", unique(data$Cover_Type))))
 
     ## Apriori
     ## 
     ## Parameter specification:
     ##  confidence minval smax arem  aval originalSupport maxtime support minlen
-    ##        0.75    0.1    1 none FALSE            TRUE       5    0.08      1
+    ##         0.7    0.1    1 none FALSE            TRUE       5    0.07      1
     ##  maxlen target   ext
     ##      10  rules FALSE
     ## 
@@ -71,21 +71,67 @@
     ##  filter tree heap memopt load sort verbose
     ##     0.1 TRUE TRUE  FALSE TRUE    2    TRUE
     ## 
-    ## Absolute minimum support count: 1209 
+    ## Absolute minimum support count: 1058 
     ## 
     ## set item appearances ...[7 item(s)] done [0.00s].
     ## set transactions ...[79 item(s), 15120 transaction(s)] done [0.01s].
     ## sorting and recoding items ... [35 item(s)] done [0.00s].
     ## creating transaction tree ... done [0.01s].
-    ## checking subsets of size 1 2 3 4 5 6 7 8 9 done [0.02s].
-    ## writing ... [2 rule(s)] done [0.00s].
+    ## checking subsets of size 1 2 3 4 5 6 7 8 9 10
+
+    ## Warning in apriori(transactions, parameter = list(support = 0.07,
+    ## confidence = 0.7), : Mining stopped (maxlen reached). Only patterns up to a
+    ## length of 10 returned!
+
+    ##  done [0.04s].
+    ## writing ... [14 rule(s)] done [0.00s].
     ## creating S4 object  ... done [0.00s].
 
     inspect(rules)
 
-    ##     lhs                                      rhs                         support confidence     lift count
-    ## [1] {Elevation=(3187,3850.986],                                                                           
-    ##      Wilderness_Area=Wilderness_Area3}    => {Cover_Type=Cover_Type7} 0.08822751  0.7562358 5.293651  1334
-    ## [2] {Elevation=(3187,3850.986],                                                                           
-    ##      Hillshade_9am=(169.3333333,254.254],                                                                 
-    ##      Wilderness_Area=Wilderness_Area3}    => {Cover_Type=Cover_Type7} 0.08551587  0.7605882 5.324118  1293
+    ##      lhs                                                            rhs                         support confidence     lift count
+    ## [1]  {Elevation=(3187,3850.986],                                                                                                 
+    ##       Horizontal_Distance_To_Roadways=(2296.666667,4593.333333]} => {Cover_Type=Cover_Type7} 0.07433862  0.7322476 5.125733  1124
+    ## [2]  {Elevation=(3187,3850.986],                                                                                                 
+    ##       Wilderness_Area=Wilderness_Area3}                          => {Cover_Type=Cover_Type7} 0.08822751  0.7562358 5.293651  1334
+    ## [3]  {Elevation=(3187,3850.986],                                                                                                 
+    ##       Hillshade_3pm=(82.66666667,165.3333333]}                   => {Cover_Type=Cover_Type7} 0.09682540  0.7055422 4.938795  1464
+    ## [4]  {Elevation=(3187,3850.986],                                                                                                 
+    ##       Horizontal_Distance_To_Roadways=(2296.666667,4593.333333],                                                                 
+    ##       Hillshade_9am=(169.3333333,254.254]}                       => {Cover_Type=Cover_Type7} 0.07175926  0.7436600 5.205620  1085
+    ## [5]  {Elevation=(3187,3850.986],                                                                                                 
+    ##       Hillshade_Noon=(202.3333333,254.155],                                                                                      
+    ##       Wilderness_Area=Wilderness_Area3}                          => {Cover_Type=Cover_Type7} 0.07843915  0.7477932 5.234552  1186
+    ## [6]  {Elevation=(3187,3850.986],                                                                                                 
+    ##       Hillshade_9am=(169.3333333,254.254],                                                                                       
+    ##       Wilderness_Area=Wilderness_Area3}                          => {Cover_Type=Cover_Type7} 0.08551587  0.7605882 5.324118  1293
+    ## [7]  {Elevation=(3187,3850.986],                                                                                                 
+    ##       Slope=(-0.052,17.33333333],                                                                                                
+    ##       Hillshade_3pm=(82.66666667,165.3333333]}                   => {Cover_Type=Cover_Type7} 0.07969577  0.7018055 4.912638  1205
+    ## [8]  {Elevation=(3187,3850.986],                                                                                                 
+    ##       Hillshade_Noon=(202.3333333,254.155],                                                                                      
+    ##       Hillshade_3pm=(82.66666667,165.3333333]}                   => {Cover_Type=Cover_Type7} 0.08842593  0.7085321 4.959724  1337
+    ## [9]  {Elevation=(3187,3850.986],                                                                                                 
+    ##       Hillshade_9am=(169.3333333,254.254],                                                                                       
+    ##       Hillshade_3pm=(82.66666667,165.3333333]}                   => {Cover_Type=Cover_Type7} 0.09596561  0.7053962 4.937773  1451
+    ## [10] {Elevation=(3187,3850.986],                                                                                                 
+    ##       Hillshade_9am=(169.3333333,254.254],                                                                                       
+    ##       Hillshade_Noon=(202.3333333,254.155],                                                                                      
+    ##       Wilderness_Area=Wilderness_Area3}                          => {Cover_Type=Cover_Type7} 0.07665344  0.7521090 5.264763  1159
+    ## [11] {Elevation=(3187,3850.986],                                                                                                 
+    ##       Slope=(-0.052,17.33333333],                                                                                                
+    ##       Hillshade_Noon=(202.3333333,254.155],                                                                                      
+    ##       Hillshade_3pm=(82.66666667,165.3333333]}                   => {Cover_Type=Cover_Type7} 0.07863757  0.7010613 4.907429  1189
+    ## [12] {Elevation=(3187,3850.986],                                                                                                 
+    ##       Slope=(-0.052,17.33333333],                                                                                                
+    ##       Hillshade_9am=(169.3333333,254.254],                                                                                       
+    ##       Hillshade_3pm=(82.66666667,165.3333333]}                   => {Cover_Type=Cover_Type7} 0.07969577  0.7018055 4.912638  1205
+    ## [13] {Elevation=(3187,3850.986],                                                                                                 
+    ##       Hillshade_9am=(169.3333333,254.254],                                                                                       
+    ##       Hillshade_Noon=(202.3333333,254.155],                                                                                      
+    ##       Hillshade_3pm=(82.66666667,165.3333333]}                   => {Cover_Type=Cover_Type7} 0.08842593  0.7085321 4.959724  1337
+    ## [14] {Elevation=(3187,3850.986],                                                                                                 
+    ##       Slope=(-0.052,17.33333333],                                                                                                
+    ##       Hillshade_9am=(169.3333333,254.254],                                                                                       
+    ##       Hillshade_Noon=(202.3333333,254.155],                                                                                      
+    ##       Hillshade_3pm=(82.66666667,165.3333333]}                   => {Cover_Type=Cover_Type7} 0.07863757  0.7010613 4.907429  1189
